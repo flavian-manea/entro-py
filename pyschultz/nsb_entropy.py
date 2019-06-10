@@ -17,7 +17,7 @@ Ilya Nemenman, Fariel Shafee, and William Bialek. Entropy and Inference, Revisit
 Ilya Nemenman, William Bialek, and Rob de Ruyter van Steveninck. Entropy and information in neural spike trains: Progress on the sampling problem. Physical Review E 69, 056111 (2004)
 
 """
- 
+
 from mpmath import psi, rf, power, quadgl, mp
 import numpy as np
 
@@ -26,7 +26,7 @@ DPS = 20
 def make_nxkx(n, K):
   """
   Return the histogram of the input histogram n assuming that the number of all bins is K.
-  
+
   >>> from numpy import array
   >>> nTest = array([4, 2, 3, 0, 2, 4, 0, 0, 2])
   >>> make_nxkx(nTest, 9)
@@ -58,7 +58,7 @@ def _S1(beta, nxkx, N, K):
 def _rhoi(x, nxkx, beta):
   return power(rf(beta, np.double(x)), nxkx[x])
 
-def _rho(beta, nxkx, N, K):  
+def _rho(beta, nxkx, N, K):
   kappa = beta*K
   rx = np.array([_rhoi(x, nxkx, beta) for x in nxkx])
   return rx.prod()/rf(kappa, np.double(N))
@@ -76,7 +76,7 @@ def _measure(w, nxkx, N, K):
 def S(nxkx, N, K):
   """
   Return the estimated entropy. nxkx is the histogram of the input histogram constructed by make_nxkx. N is the total number of elements, and K is the degree of freedom.
-  
+
   >>> from numpy import array
   >>> nTest = array([4, 2, 3, 0, 2, 4, 0, 0, 2])
   >>> K = 9  # which is actually equal to nTest.size.
@@ -85,23 +85,23 @@ def S(nxkx, N, K):
   """
   mp.dps = DPS
   mp.pretty = True
-  
+
   f = lambda w: _Si(w, nxkx, N, K)
-  g = lambda w: _measure(w, nxkx, N, K)  
-  return quadgl(f, [0, 1])/quadgl(g, [0, 1])
+  g = lambda w: _measure(w, nxkx, N, K)
+  return quadgl(f, [0, 1])/quadgl(g, [0, 1])/np.log(2)
 
 def _S2i_diag(x, nxkx, beta, N, kappa):
   xbeta = x+beta
   Nkappa2 = N+kappa+2
   psNK2 = psi(0, Nkappa2)
   ps1NK2 = psi(1, Nkappa2)
-  
+
   s1  = (psi(0, xbeta+2)-psNK2)**2 + psi(1, xbeta+2) - ps1NK2
   s1 *= nxkx[x]*xbeta*(xbeta+1)
-  
+
   s2 = (psi(0, xbeta+1)-psNK2)**2 - ps1NK2
   s2 *= nxkx[x]*(nxkx[x]-1)*xbeta*xbeta
-  
+
   return s1+s2
 
 def _S2i_nondiag(x1, x2, nxkx, beta, N, kappa):
@@ -109,7 +109,7 @@ def _S2i_nondiag(x1, x2, nxkx, beta, N, kappa):
   ps1NK2 = psi(1, N+kappa+2)
   x1beta = x1+beta
   x2beta = x2+beta
-  
+
   s1 = (psi(0, x1beta+1)-psNK2)*(psi(0, x2beta+1)-psNK2) - ps1NK2
   s1 = s1*nxkx[x1]*nxkx[x2]*x1beta*x2beta
 
@@ -120,11 +120,11 @@ def _S2(beta, nxkx, N, K):
   Nkappa = N+kappa
   nx = np.array(nxkx.keys())
   Nnx = nx.size
-  
+
   dsum = 0.0
   for x in nx:
     dsum = dsum + _S2i_diag(x, nxkx, beta, N, kappa)
-  
+
   ndsum = 0.0
   for i in xrange(Nnx-1):
     x1 = nx[i]
@@ -144,7 +144,7 @@ def _dSi(w, nxkx, N, K):
 def dS(nxkx, N, K):
   """
   Return the mean squared flucuation of the entropy.
-  
+
   >>> from numpy import array, sqrt
   >>> nTest = np.array([4, 2, 3, 0, 2, 4, 0, 0, 2])
   >>> K = 9  # which is actually equal to nTest.size.
@@ -155,13 +155,13 @@ def dS(nxkx, N, K):
   3.7904532836824960524
   >>> sqrt(ds-s**2) # the standard deviation for the estimated entropy.
   0.15602422515209426008
-  """  
-  
+  """
+
   mp.dps = DPS
   mp.pretty = True
-  
+
   f = lambda w: _dSi(w, nxkx, N, K)
-  g = lambda w: _measure(w, nxkx, N, K)  
+  g = lambda w: _measure(w, nxkx, N, K)
   return quadgl(f, [0, 1])/quadgl(g, [0, 1])
 
 if __name__ == "__main__":

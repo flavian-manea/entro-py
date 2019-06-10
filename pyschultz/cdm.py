@@ -2,7 +2,7 @@ import numpy as np
 import matlab.engine
 
 """
-plugin.py
+cdm.py
 
 This script is part of pyschultz library. It is calculating the entropy and
 mutual information of a binary 3D matrix [stimuli x word_length x # of trials]
@@ -15,9 +15,9 @@ We also assumed MATLAB is installed and CDMentropy is downloaded.
 """
 
 eng = matlab.engine.start_matlab()
-eng.addpath('C:/Users/flavi/Desktop/Project/Year 4 project/CDMentropy/src', nargout=0)
+eng.addpath('~/pyschultz/CDMentropy/src', nargout=0)
 # change path to CDMentropy working directory
-eng.addpath('C:/Users/flavi/Desktop/Project/Year 4 project/CDMentropy/lib/PYMentropy/src', nargout=0)
+eng.addpath('~/pyschultz/CDMentropy/lib/PYMentropy/src', nargout=0)
 # change path to CDMentropy working directory
 
 def entropy_all(X, s = 1, dt = 1):
