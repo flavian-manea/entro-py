@@ -6,11 +6,10 @@ General remarks:
 
 	- It works for Python 3+
 	- API Matlab engine for python should be installed: https://uk.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
-	- It depends on numpy package and possibly matplotlib 
-	- CDMentropy should be downloaded
-https://pillowlab.princeton.edu/code_CDMentropy.html
-	- The working directory of CDMentropy should be 
-specified in the cdm.py script for both entries 
+	- It depends on numpy package, mpmath and possibly matplotlib 
+	- CDMentropy is now available in this package
+	- The working directory of CDMentropy should be specified in the cdm.py script for both entries
+	- If only a 2D matrix is given (no stimulus variation) : a 3D matrix should be defined with the first dimension 1 : (i.e. XX = np.ndarray((1,X.shape[0],X.shape[1])) and the orginal matrix asssigned to it: XX[0,:,:] = X
 
 How it works:
 
