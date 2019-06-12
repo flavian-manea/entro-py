@@ -1,5 +1,5 @@
 import numpy as np
-import pyschultz.nsb_entropy as nsb
+import nsb_entropy as nsb
 
 """
 nsb.py
