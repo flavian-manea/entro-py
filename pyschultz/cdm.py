@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import matlab.engine
 
 """
@@ -15,10 +16,11 @@ We also assumed MATLAB is installed and CDMentropy is downloaded.
 """
 
 eng = matlab.engine.start_matlab()
-eng.addpath('~/pyschultz/CDMentropy/src', nargout=0)
-# change path to CDMentropy working directory
-eng.addpath('~/pyschultz/CDMentropy/lib/PYMentropy/src', nargout=0)
-# change path to CDMentropy working directory
+cwd = os.getcwd()
+str_1 = '/CDMentropy/src'
+str_2 = '/CDMentropy/lib/PYMentropy/src'
+eng.addpath(cwd+str_1, nargout=0)
+eng.addpath(cwd+str_2, nargout=0)
 
 def entropy_all(X, s = 1, dt = 1):
     xl,T = X[0,:,:].shape
